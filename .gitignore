@@ -42,3 +42,19 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Déploiement ROHAFYA HEALTH : secrets et journaux locaux (voir deploy/)
+deploy/scripts/deploiement.conf
+deploy/scripts/historique-deploiements.log
+*.env
+!deploy/portainer/*.env.example
+.env
+.env.*
+
+# Clés SSH : ne jamais les versionner
+/myiuc
+/myiuc.pub
+id_rsa*
+id_ed25519*
+*.pem
+*.key

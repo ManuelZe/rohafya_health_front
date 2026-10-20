@@ -40,6 +40,15 @@ et son modèle de variables `rohafya-health-stack.env.example`), sur le même sc
 `rohafya_front/Documentation/portainer/rohafya-stack.yml` : conteneur `rohafya-health`,
 port interne 4100, réseau Docker `proxy` partagé avec Nginx Proxy Manager.
 
+Versionnage Git, CI GitHub Actions et scripts de release / déploiement / rollback : même chaîne
+que `rohafya_front`, décrite dans `deploy/VERSIONNAGE_ET_DEPLOIEMENT.md`. Sur un nouveau poste :
+
+```bash
+bash deploy/scripts/installer-outils-git.sh   # hook de commit, modèle de message, réglages Git
+bash deploy/scripts/release.sh minor          # nouvelle version : CHANGELOG, tag vX.Y.Z, image publiée par la CI
+bash deploy/scripts/deployer-portainer.sh X.Y.Z
+```
+
 ## À faire avant mise en ligne
 
 - **Licence communautaire PrimeNG** : non configurée (voir `src/app/app.config.ts`, TODO).

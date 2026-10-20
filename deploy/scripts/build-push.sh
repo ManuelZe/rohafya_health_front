@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# =============================================================================
+#  Construit l'image Docker de ROHAFYA HEALTH et la publie sur le registre (sans CI).
+#  À utiliser si GitHub Actions n'est pas disponible. En temps normal, c'est la CI
+#  qui fait ce travail au push d'un tag (voir deploy/VERSIONNAGE_ET_DEPLOIEMENT.md).
+#
+#  Usage :
+#    bash deploy/scripts/build-push.sh            # version = tag Git du commit courant
+#    bash deploy/scripts/build-push.sh --no-push  # construit seulement (test local)
+#
+#  Règle : seule une version taguée (vX.Y.Z) peut être publiée. Cela garantit
+#  que l'image « rohafya-health:X.Y.Z » correspond EXACTEMENT au code du tag vX.Y.Z.
+# =============================================================================
+set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/lib-commun.sh"
+charger_configuration
+
+PUSH=1
+[[ "${1:-}" == "--no-push" ]] && PUSH=0
+ROHAFYA_HEALTH_IMAGE="${ROHAFYA_HEALTH_IMAGE:-ghcr.io/pdmdsante/rohafya-health}"
+
+exiger_commandes git docker curl
+cd "$ROHAFYA_ROOT"
+
+etape "1. Identification de la version"
+[[ -z "$(git status --porcelain)" ]] || erreur "Modifications non commitées : l'image ne correspondrait à aucun commit."
+tag="$(git describe --tags --exact-match --match 'v[0-9]*' 2>/dev/null || true)"
+[[ -n "$tag" ]] || erreur "Le commit courant n'a pas de tag vX.Y.Z. Créez d'abord une release (release.sh) ou faites « git checkout vX.Y.Z »."
+version="${tag#v}"
+est_semver "$version" || erreur "Tag invalide : $tag"
+commit="$(git rev-parse --short HEAD)"
+ok "Version ${version} (commit ${commit})"
+
+# Tags d'image : 1.4.2, 1.4, 1 (+ latest pour une version stable sans suffixe)
+tags=("${ROHAFYA_HEALTH_IMAGE}:${version}")
+if [[ "$version" != *-* ]]; then
+  IFS='.' read -r MAJ MIN _ <<<"$version"
+  tags+=("${ROHAFYA_HEALTH_IMAGE}:${MAJ}.${MIN}" "${ROHAFYA_HEALTH_IMAGE}:${MAJ}" "${ROHAFYA_HEALTH_IMAGE}:latest")
+fi
+
+etape "2. Construction de l'image"
+args=()
+for t in "${tags[@]}"; do args+=(-t "$t"); done
+DOCKER_BUILDKIT=1 docker build \
+  -f deploy/docker/Dockerfile \
+  --build-arg APP_VERSION="$version" \
+  --build-arg GIT_COMMIT="$commit" \
+  --build-arg BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+  "${args[@]}" .
+ok "Image construite : ${tags[*]}"
+
+etape "3. Test de fumée du conteneur"
+nom="rohafya-health-smoke-$$"
+docker run -d --rm --name "$nom" -p 127.0.0.1:4199:4100 -e API_URL=https://exemple.invalid/ "${tags[0]}" >/dev/null
+trap 'docker stop "$nom" >/dev/null 2>&1 || true' EXIT
+for _ in $(seq 1 20); do
+  sante="$(curl -fsS http://127.0.0.1:4199/healthz 2>/dev/null || true)"
+  [[ -n "$sante" ]] && break
+  sleep 1
+done
+[[ "$sante" == *"\"version\":\"${version}\""* ]] || erreur "Le conteneur ne répond pas correctement sur /healthz : ${sante:-aucune réponse}"
+ok "/healthz : $sante"
+
+if (( PUSH )); then
+  etape "4. Publication sur le registre"
+  registre="${ROHAFYA_HEALTH_IMAGE%%/*}"
+  if [[ -n "${REGISTRY_TOKEN:-}" ]]; then
+    printf '%s' "$REGISTRY_TOKEN" | docker login "$registre" -u "${REGISTRY_USER:?REGISTRY_USER manquant}" --password-stdin >/dev/null
+  fi
+  for t in "${tags[@]}"; do docker push --quiet "$t"; ok "Publié : $t"; done
+  info "Déploiement : bash deploy/scripts/deployer-portainer.sh ${version}"
+else
+  alerte "4. Publication ignorée (--no-push)"
+fi

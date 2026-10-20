@@ -29,3 +29,6 @@ deploy
 *.pem
 *.key
 *.env
+id_rsa*
+id_ed25519*
+myiuc*
