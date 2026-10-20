@@ -1,0 +1,206 @@
+:host {
+  display: block;
+}
+
+/* ===== En-tête ===== */
+.devis-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.devis-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.devis-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.back-link:hover {
+  color: var(--color-primary);
+}
+
+.lang-switch {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--rohafya-navy);
+  text-decoration: none;
+  border: 1px solid var(--rohafya-navy-200);
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+}
+
+.lang-switch:hover {
+  border-color: var(--rohafya-navy);
+  background: var(--rohafya-navy-50);
+}
+
+/* ===== Héros ===== */
+.devis-hero {
+  background: var(--rohafya-hero-bg);
+  padding: 3rem 1.25rem 3.5rem;
+}
+
+.devis-hero__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.devis-hero__kicker {
+  margin: 0 0 0.75rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.devis-hero__title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--rohafya-navy);
+}
+
+.devis-hero__intro {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* ===== Facteurs de prix ===== */
+.factors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.factor-card {
+  height: 100%;
+  border-radius: var(--radius-lg);
+}
+
+.factor-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  margin-bottom: 0.9rem;
+}
+
+.factors h3 {
+  margin: 0 0 0.4rem;
+  color: var(--rohafya-navy);
+  font-size: 1.05rem;
+}
+
+.factors p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+.devis-note {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+/* ===== Formulaire de devis ===== */
+.section--devis-form {
+  background: var(--rohafya-navy-dark);
+  color: #fff;
+}
+
+.section--devis-form .section__title {
+  color: #fff;
+  text-align: left;
+}
+
+.devis-form-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 960px) {
+  .devis-form-layout {
+    grid-template-columns: 0.9fr 1.1fr;
+    align-items: start;
+  }
+}
+
+.devis-form-layout__intro p {
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.6;
+}
+
+.devis-form-layout__whatsapp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.devis-form-layout__whatsapp a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.devis-form-layout__demo-link {
+  margin: 0.5rem 0 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.devis-form-layout__demo-link a {
+  color: var(--rohafya-green-400);
+  font-weight: 700;
+  text-decoration: underline;
+  margin-left: 0.3rem;
+}
+
+.devis-form-layout__form {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+}

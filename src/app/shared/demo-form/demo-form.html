@@ -1,0 +1,90 @@
+@if (sent(); as message) {
+  <div #confirmation class="demo-done" role="status" tabindex="-1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <p class="demo-done__title">{{ { fr: 'Demande envoyée', en: 'Request sent' } | bi }}</p>
+    <p>{{ message }}</p>
+  </div>
+} @else {
+  <form class="demo" [formRoot]="demoForm" (submit)="submit()" novalidate>
+    <p class="demo__required">{{ { fr: 'Les champs marqués * sont obligatoires.', en: 'Fields marked * are required.' } | bi }}</p>
+
+    <div class="demo__grid">
+      <div class="field">
+        <label for="demo-name">{{ { fr: 'Votre nom', en: 'Your name' } | bi }} *</label>
+        <input id="demo-name" type="text" autocomplete="name" [formField]="demoForm.contact_name"
+          [attr.aria-invalid]="!!errorOf('contact_name')" aria-describedby="demo-name-error" />
+        <span id="demo-name-error" class="field__error">{{ errorOf('contact_name') }}</span>
+      </div>
+      <div class="field">
+        <label for="demo-job">{{ { fr: 'Votre fonction', en: 'Your role' } | bi }}</label>
+        <input id="demo-job" type="text" autocomplete="organization-title" [formField]="demoForm.job_title" />
+      </div>
+      <div class="field">
+        <label for="demo-establishment">{{ { fr: 'Établissement', en: 'Facility' } | bi }} *</label>
+        <input id="demo-establishment" type="text" autocomplete="organization" [formField]="demoForm.establishment"
+          [attr.aria-invalid]="!!errorOf('establishment')" aria-describedby="demo-establishment-error" />
+        <span id="demo-establishment-error" class="field__error">{{ errorOf('establishment') }}</span>
+      </div>
+      <div class="field">
+        <label for="demo-city">{{ { fr: 'Ville', en: 'City' } | bi }} *</label>
+        <input id="demo-city" type="text" autocomplete="address-level2" [formField]="demoForm.city"
+          [attr.aria-invalid]="!!errorOf('city')" aria-describedby="demo-city-error" />
+        <span id="demo-city-error" class="field__error">{{ errorOf('city') }}</span>
+      </div>
+      <div class="field">
+        <label for="demo-phone">{{ { fr: 'WhatsApp ou téléphone', en: 'WhatsApp or phone' } | bi }} *</label>
+        <input id="demo-phone" type="tel" autocomplete="tel" [formField]="demoForm.phone"
+          [attr.aria-invalid]="!!errorOf('phone')" aria-describedby="demo-phone-error" />
+        <span id="demo-phone-error" class="field__error">{{ errorOf('phone') }}</span>
+      </div>
+      <div class="field">
+        <label for="demo-email">{{ { fr: 'E-mail professionnel', en: 'Work email' } | bi }} *</label>
+        <input id="demo-email" type="email" autocomplete="email" [formField]="demoForm.email"
+          [attr.aria-invalid]="!!errorOf('email')" aria-describedby="demo-email-error" />
+        <span id="demo-email-error" class="field__error">{{ errorOf('email') }}</span>
+      </div>
+      <div class="field">
+        <label for="demo-kind">{{ { fr: 'Type d’établissement', en: 'Facility type' } | bi }} *</label>
+        <select id="demo-kind" [formField]="demoForm.kind" [attr.aria-invalid]="!!errorOf('kind')" aria-describedby="demo-kind-error">
+          <option value="">{{ { fr: 'Choisir…', en: 'Choose…' } | bi }}</option>
+          @for (k of kinds; track k.value) {
+            <option [value]="k.value">{{ k.label | bi }}</option>
+          }
+        </select>
+        <span id="demo-kind-error" class="field__error">{{ errorOf('kind') }}</span>
+      </div>
+      <div class="field">
+        <label for="demo-software">{{ { fr: 'Logiciel ou méthode actuelle', en: 'Current software or method' } | bi }}</label>
+        <input id="demo-software" type="text" [formField]="demoForm.software" />
+      </div>
+      <div class="field field--full">
+        <label for="demo-pain">{{ { fr: 'Ce que vous cherchez à améliorer en priorité', en: 'What you most want to improve' } | bi }}</label>
+        <textarea id="demo-pain" rows="4" [formField]="demoForm.pain_points" aria-describedby="demo-pain-error"></textarea>
+        <span id="demo-pain-error" class="field__error">{{ errorOf('pain_points') }}</span>
+      </div>
+    </div>
+
+    <!-- Champ piège : invisible et ignoré par les personnes, rempli par les robots. -->
+    <div class="demo__trap" aria-hidden="true">
+      <label for="demo-website">Website</label>
+      <input id="demo-website" type="text" tabindex="-1" autocomplete="off" [formField]="demoForm.website" />
+    </div>
+
+    <label class="demo__consent">
+      <input type="checkbox" [formField]="demoForm.consent" [attr.aria-invalid]="!!errorOf('consent')" aria-describedby="demo-consent-error" />
+      <span>{{ { fr: 'J’accepte d’être recontacté au sujet de ma demande. Mes coordonnées servent uniquement à me répondre.', en: 'I agree to be contacted about my request. My details are only used to reply to me.' } | bi }} *</span>
+    </label>
+    <span id="demo-consent-error" class="field__error">{{ errorOf('consent') }}</span>
+
+    @if (error()) {
+      <div #errorBox class="demo__alert" role="alert" tabindex="-1">{{ error() }}</div>
+    }
+
+    <button type="submit" pButton class="demo__submit" [loading]="sending()" [disabled]="sending()">
+      {{ (sending() ? { fr: 'Envoi…', en: 'Sending…' } : submitLabel[mode()]) | bi }}
+    </button>
+  </form>
+}

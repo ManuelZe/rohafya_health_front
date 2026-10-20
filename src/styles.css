@@ -1,0 +1,110 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+:root {
+  /* ===== Couleurs de la marque ROHAFYA (reprises à l'identique pour ROHAFYA HEALTH) =====
+     Vert #10b981 : décor (icônes, halos, barres). Pour un texte ou un fond sous texte blanc,
+     on prend #047857 (contraste 5,5:1). Marine #0c4562 : structure. */
+  --rohafya-green: #10b981;
+  --rohafya-green-50: #ecfdf5;
+  --rohafya-green-100: #d1fae5;
+  --rohafya-green-200: #a7f3d0;
+  --rohafya-green-400: #34d399;
+  --rohafya-green-600: #059669;
+  --rohafya-green-700: #047857;
+  --rohafya-green-800: #065f46;
+  --rohafya-navy: #0c4562;
+  --rohafya-navy-dark: #08304a;
+  --rohafya-navy-50: #f2f7f9;
+  --rohafya-navy-100: #e5eef3;
+  --rohafya-navy-200: #c5d7e2;
+
+  --color-primary: var(--rohafya-green-700);
+  --color-primary-hover: var(--rohafya-green-800);
+  --color-primary-light: var(--rohafya-green-50);
+  --color-accent: var(--rohafya-navy);
+  --color-text: #2d3748;
+  --color-text-muted: #718096;
+  --color-border: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-bg: #f8fafc;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* Motif discret de croix médicales + halos vert/marine, pour les sections de fond. */
+  --rohafya-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M15 13h2v2h2v2h-2v2h-2v-2h-2v-2h2z' fill='%230c4562' fill-opacity='0.045'/%3E%3C/svg%3E");
+  --rohafya-surface-bg:
+    radial-gradient(1100px 520px at 100% -8%, rgba(16, 185, 129, 0.11), transparent 62%),
+    radial-gradient(900px 480px at -8% 108%, rgba(12, 69, 98, 0.08), transparent 60%),
+    var(--rohafya-pattern),
+    linear-gradient(180deg, #f2f6f7 0%, #e9eff1 100%);
+  --rohafya-hero-bg:
+    radial-gradient(900px 600px at 0% 0%, rgba(16, 185, 129, 0.18), transparent 60%),
+    radial-gradient(800px 560px at 100% 100%, rgba(12, 69, 98, 0.14), transparent 60%),
+    var(--rohafya-pattern),
+    linear-gradient(135deg, #f4f8f8 0%, #dde8ec 100%);
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family:
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    Roboto,
+    sans-serif;
+}
+
+/* Respecte le réglage système « réduire les animations » pour les SVG animés de la marque. */
+@media (prefers-reduced-motion: reduce) {
+  .rohafya-animated,
+  .rohafya-animated * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ===== Apparition au défilement (directive appReveal) ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease var(--reveal-delay, 0ms),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+}
+
+.reveal.reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===== Sections : mise en page commune à toutes les pages ===== */
+.section {
+  padding: 4rem 1.25rem;
+}
+
+.section--tinted {
+  background: var(--rohafya-surface-bg);
+}
+
+.section__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section__title {
+  margin: 0 0 2.25rem;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: var(--rohafya-navy);
+  text-align: center;
+}

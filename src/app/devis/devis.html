@@ -1,0 +1,73 @@
+<header class="devis-header">
+  <div class="devis-header__inner">
+    <a class="brand" [routerLink]="homePath()">
+      <app-brand-lockup [size]="32" />
+    </a>
+    <div class="devis-header__actions">
+      <a class="back-link" [routerLink]="homePath()">
+        <svg pIcon="arrow-left" [size]="16" aria-hidden="true"></svg>
+        {{ { fr: 'Retour à l’accueil', en: 'Back to home' } | bi }}
+      </a>
+      <a class="lang-switch" [routerLink]="otherLangPath()" [attr.hreflang]="lang.current() === 'fr' ? 'en' : 'fr'">
+        {{ lang.current() === 'fr' ? 'EN' : 'FR' }}
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="devis-hero">
+    <div class="devis-hero__inner">
+      <p class="devis-hero__kicker">{{ hero.kicker | bi }}</p>
+      <h1 class="devis-hero__title">{{ hero.title | bi }}</h1>
+      <p class="devis-hero__intro">{{ hero.intro | bi }}</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="factors-title">
+    <div class="section__inner">
+      <h2 id="factors-title" class="section__title" tabindex="-1">
+        {{ { fr: 'Ce qui influence le devis', en: 'What affects the quote' } | bi }}
+      </h2>
+      <div class="factors">
+        @for (factor of factors; track factor.title.fr) {
+          <p-card class="factor-card">
+            <span class="factor-card__icon"><svg [pIcon]="factor.icon" [size]="22" aria-hidden="true"></svg></span>
+            <h3>{{ factor.title | bi }}</h3>
+            <p>{{ factor.description | bi }}</p>
+          </p-card>
+        }
+      </div>
+      <p class="devis-note">{{ note | bi }}</p>
+    </div>
+  </section>
+
+  <section class="section section--devis-form" aria-labelledby="devis-form-title">
+    <div class="section__inner devis-form-layout">
+      <div class="devis-form-layout__intro">
+        <h2 id="devis-form-title" class="section__title" tabindex="-1">{{ { fr: 'Demander mon devis', en: 'Request my quote' } | bi }}</h2>
+        <p>
+          {{
+            {
+              fr: 'Quelques informations sur votre établissement suffisent pour commencer. Nous revenons vers vous avec les questions utiles à un chiffrage précis.',
+              en: 'A few details about your facility are enough to get started. We will follow up with the questions needed for an accurate quote.',
+            } | bi
+          }}
+        </p>
+        <p class="devis-form-layout__whatsapp">
+          <svg pIcon="whatsapp" [size]="18" aria-hidden="true"></svg>
+          <a [href]="'https://wa.me/' + whatsappNumber">{{ { fr: 'Ou écrivez-nous directement sur WhatsApp : ', en: 'Or write to us directly on WhatsApp: ' } | bi }}{{ whatsappDisplay }}</a>
+        </p>
+        <p class="devis-form-layout__demo-link">
+          {{ { fr: 'Vous préférez voir la solution d’abord ?', en: 'Would you rather see the solution first?' } | bi }}
+          <a [routerLink]="homePath()" fragment="demo">{{ { fr: 'Demandez une démonstration', en: 'Request a demo' } | bi }}</a>
+        </p>
+      </div>
+      <div class="devis-form-layout__form">
+        <app-demo-form mode="devis" />
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-site-footer />

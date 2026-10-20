@@ -1,0 +1,201 @@
+<header id="top" class="site-header" [class.site-header--scrolled]="scrolled()">
+  <div class="site-header__inner">
+    <a class="brand" href="#top" (click)="closeMenu()">
+      <app-brand-lockup [size]="34" />
+    </a>
+
+    <nav class="nav nav--desktop" aria-label="Navigation principale">
+      @for (link of navLinks; track link.id) {
+        <a [href]="'#' + link.id">{{ link.label | bi }}</a>
+      }
+    </nav>
+
+    <div class="header__actions">
+      <a class="lang-switch" [routerLink]="otherLangPath()" [attr.hreflang]="lang.current() === 'fr' ? 'en' : 'fr'">
+        {{ lang.current() === 'fr' ? 'EN' : 'FR' }}
+      </a>
+      <a class="btn btn--primary header__cta" [href]="'#' + demoAnchor">{{ hero.ctaPrimary | bi }}</a>
+      <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-controls="mobile-nav">
+        <svg [pIcon]="menuOpen() ? 'times' : 'bars'" [size]="22" aria-hidden="true"></svg>
+        <span class="sr-only">{{ { fr: 'Menu', en: 'Menu' } | bi }}</span>
+      </button>
+    </div>
+  </div>
+
+  @if (menuOpen()) {
+    <nav id="mobile-nav" class="nav nav--mobile" aria-label="Navigation mobile">
+      @for (link of navLinks; track link.id) {
+        <a [href]="'#' + link.id" (click)="closeMenu()">{{ link.label | bi }}</a>
+      }
+    </nav>
+  }
+</header>
+
+<main>
+  <!-- ===== Accueil ===== -->
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="hero__kicker">{{ hero.kicker | bi }}</p>
+      <h1 class="hero__title">{{ hero.title | bi }}</h1>
+      <p class="hero__subtitle">{{ hero.subtitle | bi }}</p>
+      <div class="hero__ctas">
+        <a class="btn btn--primary btn--lg" [href]="'#' + demoAnchor">
+          {{ hero.ctaPrimary | bi }}
+          <svg pIcon="arrow-right" [size]="16" aria-hidden="true"></svg>
+        </a>
+        <a class="btn btn--ghost btn--lg" href="#solution">{{ hero.ctaSecondary | bi }}</a>
+      </div>
+      <ul class="hero__highlights">
+        @for (item of hero.highlights; track item.fr) {
+          <li><svg pIcon="check-circle" [size]="16" aria-hidden="true"></svg>{{ item | bi }}</li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Audiences ===== -->
+  <section id="solution" class="section" aria-labelledby="solution-title">
+    <div class="section__inner">
+      <h2 id="solution-title" class="section__title" tabindex="-1">
+        {{ { fr: 'Conçu pour trois types d’établissements', en: 'Built for three kinds of facilities' } | bi }}
+      </h2>
+      <div class="audiences">
+        @for (audience of audiences; track audience.title.fr; let i = $index) {
+          <p-card class="audience-card" appReveal [appReveal]="i * 80">
+            <span class="audience-card__icon"><svg [pIcon]="audience.icon" [size]="22" aria-hidden="true"></svg></span>
+            <h3>{{ audience.title | bi }}</h3>
+            <p>{{ audience.description | bi }}</p>
+          </p-card>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Fonctionnalités ===== -->
+  <section id="fonctionnalites" class="section section--tinted" aria-labelledby="pillars-title">
+    <div class="section__inner">
+      <h2 id="pillars-title" class="section__title" tabindex="-1">
+        {{ { fr: 'Un système, quatre piliers', en: 'One system, four pillars' } | bi }}
+      </h2>
+      <div class="pillars">
+        @for (pillar of pillars; track pillar.title.fr; let i = $index) {
+          <p-card class="pillar-card" appReveal [appReveal]="i * 80">
+            <span class="pillar-card__icon"><svg [pIcon]="pillar.icon" [size]="24" aria-hidden="true"></svg></span>
+            <h3>{{ pillar.title | bi }}</h3>
+            <ul>
+              @for (point of pillar.points; track point.fr) {
+                <li>{{ point | bi }}</li>
+              }
+            </ul>
+          </p-card>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Avant / après ===== -->
+  <section class="section" aria-labelledby="compare-title">
+    <div class="section__inner">
+      <h2 id="compare-title" class="section__title" tabindex="-1">
+        {{ { fr: 'Ce que ça change au quotidien', en: 'What changes day to day' } | bi }}
+      </h2>
+      <div class="compare">
+        <div class="compare__head compare__head--before">{{ { fr: 'Avant', en: 'Before' } | bi }}</div>
+        <div class="compare__head compare__head--after">{{ { fr: 'Avec ROHAFYA HEALTH', en: 'With ROHAFYA HEALTH' } | bi }}</div>
+        @for (row of compareRows; track row.before.fr; let i = $index) {
+          <div class="compare__row compare__row--before" appReveal [appReveal]="i * 60">{{ row.before | bi }}</div>
+          <div class="compare__row compare__row--after" appReveal [appReveal]="i * 60">
+            <svg pIcon="check-circle" [size]="16" aria-hidden="true"></svg>{{ row.after | bi }}
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Mise en œuvre ===== -->
+  <section id="mise-en-oeuvre" class="section section--tinted" aria-labelledby="onboarding-title">
+    <div class="section__inner">
+      <h2 id="onboarding-title" class="section__title" tabindex="-1">
+        {{ { fr: 'Une mise en service progressive', en: 'A gradual rollout' } | bi }}
+      </h2>
+      <ol class="steps">
+        @for (step of onboarding; track step.title.fr; let i = $index) {
+          <li class="steps__item" appReveal [appReveal]="i * 80">
+            <span class="steps__index">{{ i + 1 }}</span>
+            <div>
+              <h3>{{ step.title | bi }}</h3>
+              <p>{{ step.description | bi }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== Sécurité ===== -->
+  <section id="securite" class="section" aria-labelledby="security-title">
+    <div class="section__inner">
+      <h2 id="security-title" class="section__title" tabindex="-1">
+        {{ { fr: 'La sécurité des données de santé', en: 'Keeping health data secure' } | bi }}
+      </h2>
+      <div class="trust">
+        @for (point of trustPoints; track point.text.fr) {
+          <div class="trust__item">
+            <span class="trust__icon"><svg [pIcon]="point.icon" [size]="20" aria-hidden="true"></svg></span>
+            <p>{{ point.text | bi }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="questions" class="section section--tinted" aria-labelledby="faq-title">
+    <div class="section__inner">
+      <h2 id="faq-title" class="section__title" tabindex="-1">
+        {{ { fr: 'Questions fréquentes', en: 'Frequently asked questions' } | bi }}
+      </h2>
+      <div class="faq">
+        @for (item of faq; track item.question.fr; let first = $first) {
+          <details class="faq__item" name="home-faq" [open]="first">
+            <summary class="faq__question">
+              <span>{{ item.question | bi }}</span>
+              <span class="faq__chevron" aria-hidden="true"><svg pIcon="chevron-down" [size]="18"></svg></span>
+            </summary>
+            <p class="faq__answer">{{ item.answer | bi }}</p>
+          </details>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Demande de démonstration ===== -->
+  <section [id]="demoAnchor" class="section section--demo" aria-labelledby="demo-title">
+    <div class="section__inner demo-layout">
+      <div class="demo-layout__intro">
+        <h2 id="demo-title" class="section__title" tabindex="-1">{{ { fr: 'Demander une démonstration', en: 'Request a demo' } | bi }}</h2>
+        <p>
+          {{
+            {
+              fr: 'Un premier échange de 20 à 30 minutes pour comprendre votre établissement. Le tarif est ensuite établi sur devis, selon la taille et les modules retenus.',
+              en: 'A first 20‑30 minute call to understand your facility. Pricing is then set by quote, based on size and the modules chosen.',
+            } | bi
+          }}
+        </p>
+        <p class="demo-layout__whatsapp">
+          <svg pIcon="whatsapp" [size]="18" aria-hidden="true"></svg>
+          <a [href]="'https://wa.me/' + whatsappNumber">{{ { fr: 'Ou écrivez-nous directement sur WhatsApp : ', en: 'Or write to us directly on WhatsApp: ' } | bi }}{{ whatsappDisplay }}</a>
+        </p>
+        <p class="demo-layout__devis-link">
+          {{ { fr: 'Vous voulez d’abord un chiffrage ?', en: 'Want a price estimate first?' } | bi }}
+          <a [routerLink]="devisPath()">{{ { fr: 'Demandez un devis', en: 'Request a quote' } | bi }}</a>
+        </p>
+      </div>
+      <div class="demo-layout__form">
+        <app-demo-form />
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-site-footer />
