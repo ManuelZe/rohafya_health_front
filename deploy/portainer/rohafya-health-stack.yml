@@ -12,17 +12,17 @@ services:
   rohafya-health:
     # Version TOUJOURS explicite (ex. 1.0.0) : jamais « latest » en production,
     # sinon impossible de savoir ce qui tourne ni de revenir en arrière.
-    image: ${ROHAFYA_HEALTH_IMAGE:-ghcr.io/pdmdsante/rohafya-health}:${ROHAFYA_HEALTH_VERSION:?Définir ROHAFYA_HEALTH_VERSION (ex. 1.0.0)}
+    image: ${ROHAFYA_HEALTH_IMAGE:-ghcr.io/manuelze/rohafya-health}:${ROHAFYA_HEALTH_VERSION}
     container_name: rohafya-health-${ROHAFYA_HEALTH_ENV:-production}
     restart: unless-stopped
 
     environment:
       # URL de l'API Flask appelée par le navigateur (même API que ROHAFYA : saas/public/trial-requests).
-      API_URL: ${API_URL:?Définir API_URL (ex. https://api.rohafya.com/)}
+      API_URL: https://api.rohafya.com/
       # production | preprod : seule la production est ouverte aux moteurs de recherche (robots.txt, sitemap).
       ROHAFYA_ENV: ${ROHAFYA_HEALTH_ENV:-production}
       # Noms de domaine autorisés à atteindre le rendu serveur (protection SSRF), séparés par des virgules.
-      NG_ALLOWED_HOSTS: ${ROHAFYA_HEALTH_DOMAINS:?Définir ROHAFYA_HEALTH_DOMAINS (ex. health.rohafya.com)}
+      NG_ALLOWED_HOSTS: "health.rohafya.com"
       # En-têtes transmis par le reverse proxy (Nginx Proxy Manager).
       NG_TRUST_PROXY_HEADERS: x-forwarded-host,x-forwarded-proto,x-forwarded-for
       PORT: "4100"
@@ -33,7 +33,7 @@ services:
     # Nginx Proxy Manager via le réseau Docker « proxy ».
     # ATTENTION : Docker contourne le pare-feu UFW pour les ports publiés sur 0.0.0.0.
     ports:
-      - "127.0.0.1:${ROHAFYA_HEALTH_HTTP_PORT:-4100}:4100"
+      - "9874:4100"
 
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:4100/healthz"]
@@ -76,7 +76,8 @@ services:
       - proxy
 
 networks:
-  # Réseau partagé avec Nginx Proxy Manager, déjà créé pour ROHAFYA :
-  #   docker network create proxy
-  proxy:
-    external: true
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.117.0.0/16
