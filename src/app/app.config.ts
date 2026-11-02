@@ -55,6 +55,7 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       // TODO : clé de licence communautaire PrimeNG (voir https://primeng.org/license).
       // Celle de rohafya_front n'est pas reprise ici sans confirmation qu'elle peut être partagée entre projets.
+      license : "eyJpZCI6IjM4NTA2ZTVkLTQ3NmEtNDUwMi04ZDg2LTY0YzA3NzQ3ZGQ5NyIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODI5MDUzODAsImV4cCI6MTgxNDQ0MTM4MH0.I7n5VbbUT4iokSQ3JuuvSN6HR4-6x00vQzIcumP-OGexo-iydFm-4LMFm-AyNaIGjWeNiWnWQcMQQavr5i3-Cw",
       theme: {
         preset: rohafyaHealthPreset,
         options: {
