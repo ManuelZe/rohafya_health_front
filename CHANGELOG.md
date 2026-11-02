@@ -1,5 +1,11 @@
 # Historique des versions ROHAFYA HEALTH
 
+## v0.3.0 — 2026-11-02
+
+### Corrections
+
+- **cle** chargement de la clée de primeui (3cfe8f5)
+
 ## v0.2.0 — 2026-10-20
 
 ### Divers
